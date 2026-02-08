@@ -8,14 +8,20 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     # Database
-    database_url: str
+    # Provide a development default so Spaces can build without secrets.
+    # Use synchronous sqlite driver to avoid async driver initialization during
+    # the build/startup phase (avoids greenlet_spawn errors).
+    # In production, set `DATABASE_URL` in the environment or Spaces secret.
+    database_url: str = "sqlite:///./dev.db"
 
     # API
     api_host: str = "0.0.0.0"
     api_port: int = 8000
 
     # JWT Authentication
-    jwt_secret: str
+    # Provide a non-sensitive default for development. Replace with a secure
+    # secret via environment variables in production (e.g., Spaces secrets).
+    jwt_secret: str = "dev-secret"
     jwt_algorithm: str = "HS256"
     jwt_expiration_minutes: int = 15  # Short-lived access tokens
     jwt_refresh_expiration_hours: int = 168  # Longer refresh tokens
