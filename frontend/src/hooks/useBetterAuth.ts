@@ -30,60 +30,22 @@ export function useBetterAuth(): AuthContextType {
   // Direct API calls to match our backend endpoints
   const signInHandler = useCallback(async (email: string, password: string) => {
     try {
-      // Attempt real sign-in, but regardless of result redirect to /tasks.
-      // This simplifies the flow for demo purposes (no extra auth logic).
-      let response = null;
-      try {
-        response = await apiClient.post('/auth/signin', { email, password });
-      } catch (e) {
-        // swallow backend errors for now; we'll still redirect
-        response = null;
-      }
-
-      // Store token if present; otherwise set a fallback dev token
-      const token = response?.data?.access_token || 'dev-token';
-      localStorage.setItem('access_token', token);
-      router.push('/tasks');
+      // Attempt real sign-in and return the token (or null on failure).
+      const response = await apiClient.post('/auth/signin', { email, password });
+      const token = response?.data?.access_token || null;
+      return token;
     } catch (err: unknown) {
-      const errorMessage = (() => {
-        try {
-          if (typeof err === 'string') return err;
-          if (err && typeof err === 'object') return JSON.stringify(err);
-          return String(err);
-        } catch {
-          return 'Sign in failed';
-        }
-      })();
-      // still redirect on unexpected errors
-      localStorage.setItem('access_token', 'dev-token');
-      router.push('/tasks');
+      return null;
     }
   }, [router]);
 
   const signUpHandler = useCallback(async (email: string, password: string) => {
     try {
-      let response = null;
-      try {
-        response = await apiClient.post('/auth/signup', { email, password });
-      } catch (e) {
-        response = null;
-      }
-      const token = response?.data?.access_token || 'dev-token';
-      localStorage.setItem('access_token', token);
-      router.push('/tasks');
+      const response = await apiClient.post('/auth/signup', { email, password });
+      const token = response?.data?.access_token || null;
+      return token;
     } catch (err: unknown) {
-      const errorMessage = (() => {
-        try {
-          if (typeof err === 'string') return err;
-          if (err && typeof err === 'object') return JSON.stringify(err);
-          return String(err);
-        } catch {
-          return 'Sign up failed';
-        }
-      })();
-      // still redirect on errors for demo simplicity
-      localStorage.setItem('access_token', 'dev-token');
-      router.push('/tasks');
+      return null;
     }
   }, [router]);
 

@@ -60,29 +60,20 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   const signIn = async (email: string, password: string) => {
     try {
       setAuthState(prev => ({ ...prev, loading: true, error: null }));
-      await authHook.signIn(email, password);
-
-      // After successful sign in, get the token and decode user info
-      const token = localStorage.getItem('access_token');
+      const token = await authHook.signIn(email, password);
+      // If backend returned a token, store it and navigate. Otherwise fail.
       if (token) {
+        localStorage.setItem('access_token', token);
         const decoded = parseJwt(token);
         if (decoded) {
-          const user: User = {
-            id: decoded.sub,
-            email: decoded.email,
-            token: token
-          };
-          setAuthState({
-            user,
-            loading: false,
-            error: null,
-            isAuthenticated: true
-          });
-          // Force a full-page navigation to ensure auth state is persisted
-          // and avoid intermediate client-side auth guards from redirecting.
+          const user: User = { id: decoded.sub, email: decoded.email, token };
+          setAuthState({ user, loading: false, error: null, isAuthenticated: true });
+          // Navigate to dashboard after token is stored.
           window.location.href = '/tasks';
+          return;
         }
       }
+      throw new Error('Authentication failed');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setAuthState(prev => ({
@@ -99,29 +90,18 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   const signUp = async (email: string, password: string) => {
     try {
       setAuthState(prev => ({ ...prev, loading: true, error: null }));
-      await authHook.signUp(email, password);
-
-      // After successful sign up, get the token and decode user info
-      const token = localStorage.getItem('access_token');
+      const token = await authHook.signUp(email, password);
       if (token) {
+        localStorage.setItem('access_token', token);
         const decoded = parseJwt(token);
         if (decoded) {
-          const user: User = {
-            id: decoded.sub,
-            email: decoded.email,
-            token: token
-          };
-          setAuthState({
-            user,
-            loading: false,
-            error: null,
-            isAuthenticated: true
-          });
-          // Force a full-page navigation to ensure auth state is persisted
-          // and avoid intermediate client-side auth guards from redirecting.
+          const user: User = { id: decoded.sub, email: decoded.email, token };
+          setAuthState({ user, loading: false, error: null, isAuthenticated: true });
           window.location.href = '/tasks';
+          return;
         }
       }
+      throw new Error('Sign up failed');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setAuthState(prev => ({
