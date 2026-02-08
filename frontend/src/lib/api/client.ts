@@ -1,8 +1,10 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  // Always use the deployed Hugging Face Space backend for API calls
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000",
+  // Use `NEXT_PUBLIC_API_URL` when provided (Vercel env var). Fall back to
+  // the deployed Hugging Face Space backend so the sites remain connected.
+  baseURL:
+    process.env.NEXT_PUBLIC_API_URL || "https://saad146-phase-3.hf.space",
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 });
