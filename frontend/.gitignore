@@ -33,6 +33,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# Ensure local `src/lib` is tracked (root .gitignore contains a global `lib/` rule)
+!src/lib/
+
 # vercel
 .vercel
 
