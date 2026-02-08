@@ -74,12 +74,14 @@ async def sign_up(
     )
 
     # Set the token as an HTTP-only cookie
+    # Set cross-site cookie so Vercel frontend (different origin) can receive it.
+    # `samesite="none"` and `secure=True` are required for modern browsers.
     response.set_cookie(
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=False,  # Set to True in production with HTTPS
-        samesite="lax",
+        secure=True,
+        samesite="none",
         max_age=settings.jwt_expiration_minutes * 60,
     )
 
@@ -150,12 +152,13 @@ async def sign_in(
     )
 
     # Set the token as an HTTP-only cookie
+    # Set cross-site cookie so Vercel frontend (different origin) can receive it.
     response.set_cookie(
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=False,  # Set to True in production with HTTPS
-        samesite="lax",
+        secure=True,
+        samesite="none",
         max_age=settings.jwt_expiration_minutes * 60,
     )
 
