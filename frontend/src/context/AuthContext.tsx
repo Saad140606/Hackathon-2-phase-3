@@ -57,11 +57,11 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
 
   // Initial auth state is derived synchronously from localStorage via the useState initializer above.
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string): Promise<string | null> => {
     try {
       setAuthState(prev => ({ ...prev, loading: true, error: null }));
       const token = await authHook.signIn(email, password);
-      // If backend returned a token, store it and navigate. Otherwise fail.
+      // If backend returned a token, store it and navigate. Otherwise return null.
       if (token) {
         localStorage.setItem('access_token', token);
         const decoded = parseJwt(token);
@@ -70,10 +70,16 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
           setAuthState({ user, loading: false, error: null, isAuthenticated: true });
           // Navigate to dashboard after token is stored.
           window.location.href = '/tasks';
-          return;
+          return token;
         }
+        // token present but couldn't decode — still return token
+        localStorage.setItem('access_token', token);
+        setAuthState({ user: null, loading: false, error: null, isAuthenticated: false });
+        return token;
       }
-      throw new Error('Authentication failed');
+      // No token
+      setAuthState(prev => ({ ...prev, loading: false }));
+      return null;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setAuthState(prev => ({
@@ -83,11 +89,11 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
         isAuthenticated: false,
         user: null
       }));
-      throw err;
+      return null;
     }
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string): Promise<string | null> => {
     try {
       setAuthState(prev => ({ ...prev, loading: true, error: null }));
       const token = await authHook.signUp(email, password);
@@ -98,10 +104,14 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
           const user: User = { id: decoded.sub, email: decoded.email, token };
           setAuthState({ user, loading: false, error: null, isAuthenticated: true });
           window.location.href = '/tasks';
-          return;
+          return token;
         }
+        localStorage.setItem('access_token', token);
+        setAuthState({ user: null, loading: false, error: null, isAuthenticated: false });
+        return token;
       }
-      throw new Error('Sign up failed');
+      setAuthState(prev => ({ ...prev, loading: false }));
+      return null;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setAuthState(prev => ({
@@ -111,7 +121,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
         isAuthenticated: false,
         user: null
       }));
-      throw err;
+      return null;
     }
   };
 
