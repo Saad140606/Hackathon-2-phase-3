@@ -69,7 +69,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
         // navigation. This cookie is not httpOnly (requires JS) but is
         // necessary for server-side middleware checks.
         try {
-          const maxAge = settings?.jwt_expiration_minutes ? settings.jwt_expiration_minutes * 60 : 900;
+          const maxAge = 15 * 60; // default 15 minutes
           // Use SameSite=None and Secure for cross-site behavior; path=/ so middleware can read it.
           document.cookie = `auth_token=${token}; Path=/; Max-Age=${maxAge}; Secure; SameSite=None`;
         } catch (e) {
@@ -108,8 +108,12 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
     try {
       setAuthState(prev => ({ ...prev, loading: true, error: null }));
       const token = await authHook.signUp(email, password);
-      localStorage.setItem('access_token', token);
+      if (token) {
         localStorage.setItem('access_token', token);
+        try {
+          const maxAge = 15 * 60;
+          document.cookie = `auth_token=${token}; Path=/; Max-Age=${maxAge}; Secure; SameSite=None`;
+        } catch {}
         const decoded = parseJwt(token);
         if (decoded) {
           const user: User = { id: decoded.sub, email: decoded.email, token };
@@ -117,7 +121,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
           window.location.href = '/tasks';
           return token;
         }
-        localStorage.setItem('access_token', token);
+        // token present but couldn't decode
         setAuthState({ user: null, loading: false, error: null, isAuthenticated: false });
         return token;
       }
