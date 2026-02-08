@@ -10,6 +10,7 @@ sqlmodel>=0.0.14
 # Database
 psycopg2-binary>=2.9.9
 alembic>=1.13.0
+aiosqlite>=0.18.0
 
 # Testing
 pytest>=7.4.0
