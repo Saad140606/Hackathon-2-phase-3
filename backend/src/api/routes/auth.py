@@ -83,6 +83,14 @@ async def sign_up(
         max_age=settings.jwt_expiration_minutes * 60,
     )
 
+    # Also include Authorization header so JS frontends can read the token
+    # (CORS must expose the Authorization header and client must allow credentials)
+    response.headers["Authorization"] = f"Bearer {access_token}"
+
+    # Also include Authorization header so JS frontends can read the token
+    # (CORS must expose the Authorization header and client must allow credentials)
+    response.headers["Authorization"] = f"Bearer {access_token}"
+
     # For BetterAuth compatibility, we return a structure that the frontend can use
     return SignUpResponse(
         user=UserResponse.model_validate(user),
@@ -151,6 +159,8 @@ async def sign_in(
         max_age=settings.jwt_expiration_minutes * 60,
     )
 
+    # Also include Authorization header so JS frontends can read the token
+    response.headers["Authorization"] = f"Bearer {access_token}"
     return SignInResponse(
         access_token=access_token,
         refresh_token="",  # BetterAuth typically handles refresh internally
