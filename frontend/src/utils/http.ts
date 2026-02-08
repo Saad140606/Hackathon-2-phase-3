@@ -17,7 +17,9 @@ export interface HttpResponse<T = unknown> {
   headers: Headers;
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// Default to deployed Hugging Face Space backend. Allow override via
+// NEXT_PUBLIC_API_URL (set this in Vercel) during deployment.
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://saad146-phase-3.hf.space';
 
 /**
  * Create an HTTP error from a failed response
