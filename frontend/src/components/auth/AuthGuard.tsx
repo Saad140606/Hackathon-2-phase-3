@@ -18,42 +18,44 @@ interface AuthGuardProps {
 
 export function AuthGuard({ children, fallback }: AuthGuardProps) {
   const router = useRouter();
-  const [isChecking, setIsChecking] = useState(true);
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return Boolean(localStorage.getItem('access_token'));
+  });
+
+  const [isChecking, setIsChecking] = useState<boolean>(() => !isAuth);
 
   useEffect(() => {
-    // Fast path: if an access token exists in localStorage, consider user authenticated (dev fallback)
-    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
-    if (token) {
-      setIsAuth(true);
+    if (isAuth) {
+      // no-op: already authenticated via local token
       setIsChecking(false);
       return;
     }
 
-    // Check authentication status by calling backend via axios (sends credentials)
     const checkAuth = async () => {
       try {
         const response = await apiClient.get('/auth/me');
         if (response.status === 200) {
           setIsAuth(true);
-          setIsChecking(false);
         } else {
           console.warn('Auth check non-200:', response.status, response.data);
-          setIsAuth(false);
-          setIsChecking(false);
           router.push('/signin');
         }
-      } catch (error: any) {
-        // Log detailed error to help debugging CORS/network issues
-        console.error('Auth check failed (axios):', error?.response ?? error?.message ?? error);
-        setIsAuth(false);
-        setIsChecking(false);
+      } catch (err) {
+        try {
+          if (typeof err === 'object' && err !== null) console.error('Auth check failed (axios):', JSON.stringify(err));
+          else console.error('Auth check failed (axios):', String(err));
+        } catch {
+          console.error('Auth check failed (axios):', err);
+        }
         router.push('/signin');
+      } finally {
+        setIsChecking(false);
       }
     };
 
     checkAuth();
-  }, [router]);
+  }, [isAuth, router]);
 
   // Show loading state while checking
   if (isChecking) {

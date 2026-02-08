@@ -89,11 +89,12 @@ export function SignInForm({ onSuccess, initialEmail = '' }: SignInFormProps) {
       setFormState((prev) => ({ ...prev, isSubmitting: true, errors: {} }));
       await signIn(formState.email, formState.password);
       onSuccess?.();
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
       setFormState((prev) => ({
         ...prev,
         isSubmitting: false,
-        errors: { general: error.message || 'Invalid credentials' },
+        errors: { general: msg || 'Invalid credentials' },
       }));
     }
   };

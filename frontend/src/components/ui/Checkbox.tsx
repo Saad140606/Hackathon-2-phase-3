@@ -1,13 +1,14 @@
 // T035: Checkbox component with large click area
 
-import React from 'react';
+import React, { useId } from 'react';
 
 interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string;
 }
 
 export function Checkbox({ label, className = '', id, ...props }: CheckboxProps) {
-  const checkboxId = id || label?.toLowerCase().replace(/\s+/g, '-') || `checkbox-${Math.random()}`;
+  const generatedId = useId();
+  const checkboxId = id || label?.toLowerCase().replace(/\s+/g, '-') || `checkbox-${generatedId}`;
 
   return (
     <div className="flex items-center">

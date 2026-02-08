@@ -13,15 +13,7 @@ import { AuthGuard } from '@/components/auth/AuthGuard';
 import { validateDomainAllowlist } from '@/utils/domain';
 
 export default function ChatPage() {
-  const [domainError, setDomainError] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Validate domain allowlist on component mount
-    const error = validateDomainAllowlist();
-    if (error) {
-      setDomainError(error);
-    }
-  }, []);
+  const [domainError] = useState<string | null>(() => validateDomainAllowlist());
 
   // Show domain error if not allowed
   if (domainError) {

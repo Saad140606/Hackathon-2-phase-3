@@ -42,11 +42,17 @@ export function useBetterAuth(): AuthContextType {
       } else {
         throw new Error('Sign in failed - no token received');
       }
-    } catch (error: any) {
-      const detail = error.response?.data?.detail ?? error.response?.data;
-      const errorMessage =
-        detail?.message || detail?.error?.message || error.message || 'Sign in failed';
-      throw new Error(errorMessage);
+    } catch (err: unknown) {
+      const errorMessage = (() => {
+        try {
+          if (typeof err === 'string') return err;
+          if (err && typeof err === 'object') return JSON.stringify(err);
+          return String(err);
+        } catch {
+          return 'Sign in failed';
+        }
+      })();
+      throw new Error(errorMessage || 'Sign in failed');
     }
   }, [router]);
 
@@ -64,11 +70,17 @@ export function useBetterAuth(): AuthContextType {
       } else {
         throw new Error('Sign up failed - no token received');
       }
-    } catch (error: any) {
-      const detail = error.response?.data?.detail ?? error.response?.data;
-      const errorMessage =
-        detail?.message || detail?.error?.message || error.message || 'Sign up failed';
-      throw new Error(errorMessage);
+    } catch (err: unknown) {
+      const errorMessage = (() => {
+        try {
+          if (typeof err === 'string') return err;
+          if (err && typeof err === 'object') return JSON.stringify(err);
+          return String(err);
+        } catch {
+          return 'Sign up failed';
+        }
+      })();
+      throw new Error(errorMessage || 'Sign up failed');
     }
   }, [router]);
 

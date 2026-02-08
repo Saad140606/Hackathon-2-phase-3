@@ -30,34 +30,28 @@ function parseJwt(token: string) {
 
 export function AuthContextProvider({ children }: { children: ReactNode }) {
   const authHook = useBetterAuth();
-  const [authState, setAuthState] = useState<AuthState>({
-    user: null,
-    loading: false,
-    error: null,
-    isAuthenticated: false,
+  const [authState, setAuthState] = useState<AuthState>(() => {
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+      if (token) {
+        const decoded = parseJwt(token);
+        if (decoded) {
+          return {
+            user: { id: decoded.sub, email: decoded.email, token },
+            loading: false,
+            error: null,
+            isAuthenticated: true,
+          };
+        }
+      }
+    } catch (e) {
+      // ignore and fall through to default
+    }
+    return { user: null, loading: false, error: null, isAuthenticated: false };
   });
   const router = useRouter();
 
-  // Check for existing token on initial load and decode user info
-  useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      const decoded = parseJwt(token);
-      if (decoded) {
-        const user: User = {
-          id: decoded.sub,
-          email: decoded.email,
-          token: token
-        };
-        setAuthState({
-          user,
-          loading: false,
-          error: null,
-          isAuthenticated: true
-        });
-      }
-    }
-  }, []);
+  // Initial auth state is derived synchronously from localStorage via the useState initializer above.
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -85,15 +79,16 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
           window.location.href = '/tasks';
         }
       }
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
       setAuthState(prev => ({
         ...prev,
         loading: false,
-        error: error.message || 'Sign in failed',
+        error: msg || 'Sign in failed',
         isAuthenticated: false,
         user: null
       }));
-      throw error;
+      throw err;
     }
   };
 
@@ -123,15 +118,16 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
           window.location.href = '/tasks';
         }
       }
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
       setAuthState(prev => ({
         ...prev,
         loading: false,
-        error: error.message || 'Sign up failed',
+        error: msg || 'Sign up failed',
         isAuthenticated: false,
         user: null
       }));
-      throw error;
+      throw err;
     }
   };
 

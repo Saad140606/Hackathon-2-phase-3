@@ -85,9 +85,9 @@ export function TaskChatAssistant() {
                   />
                 </svg>
               </div>
-              <div>
+                <div>
                 <h3 className="text-xl font-bold text-white mb-2">
-                  Hey! I'm your AI Assistant
+                  Hey! I&apos;m your AI Assistant
                 </h3>
                 <p className="text-sm text-gray-400">
                   I can help you manage tasks with natural language
@@ -97,19 +97,19 @@ export function TaskChatAssistant() {
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Try these commands:</p>
                 <div className="flex items-start gap-3 text-sm text-gray-300 hover:text-white transition-colors group">
                   <span className="text-blue-400 group-hover:text-blue-300">→</span>
-                  <span>"Create a task to buy groceries"</span>
+                  <span>&quot;Create a task to buy groceries&quot;</span>
                 </div>
                 <div className="flex items-start gap-3 text-sm text-gray-300 hover:text-white transition-colors group">
                   <span className="text-blue-400 group-hover:text-blue-300">→</span>
-                  <span>"Show me all my tasks"</span>
+                            <span>&quot;Show me all my tasks&quot;</span>
                 </div>
                 <div className="flex items-start gap-3 text-sm text-gray-300 hover:text-white transition-colors group">
                   <span className="text-blue-400 group-hover:text-blue-300">→</span>
-                  <span>"Mark the grocery task as complete"</span>
+                  <span>&quot;Mark the grocery task as complete&quot;</span>
                 </div>
                 <div className="flex items-start gap-3 text-sm text-gray-300 hover:text-white transition-colors group">
                   <span className="text-blue-400 group-hover:text-blue-300">→</span>
-                  <span>"Delete all completed tasks"</span>
+                  <span>&quot;Delete all completed tasks&quot;</span>
                 </div>
               </div>
             </div>

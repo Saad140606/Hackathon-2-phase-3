@@ -17,6 +17,7 @@ import type {
 /**
  * Transform backend snake_case response to frontend camelCase format
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 function transformChatResponse(backendResponse: any): ChatResponse {
   const conversationId = backendResponse.conversationId || backendResponse.conversation_id;
   return {

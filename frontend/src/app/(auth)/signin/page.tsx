@@ -17,7 +17,7 @@ export default function SignInPage() {
       <SignInForm />
 
       <div className="text-center text-sm">
-        <span className="text-gray-400">Don't have an account? </span>
+        <span className="text-gray-400">Don&apos;t have an account? </span>
         <Link
           href="/signup"
           className="font-medium text-primary-400 hover:text-primary-300 transition-colors"

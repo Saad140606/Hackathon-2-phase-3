@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Task, TaskCreateRequest, TaskFormState } from '@/types/tasks';
 import { validateTaskTitle } from '@/lib/utils/validation';
 import { Input } from '../ui/Input';
@@ -35,9 +35,7 @@ export function TaskForm({
     isSubmitting: false,
   });
 
-  useEffect(() => {
-    setFormState((prev) => ({ ...prev, isSubmitting }));
-  }, [isSubmitting]);
+  // Use the incoming `isSubmitting` prop directly where needed instead of mirroring it in local state.
 
   const handleBlur = (field: 'title' | 'description') => {
     setFormState((prev) => ({
@@ -91,10 +89,11 @@ export function TaskForm({
         title: formState.title.trim(),
         description: formState.description.trim() || undefined,
       });
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
       setFormState((prev) => ({
         ...prev,
-        errors: { general: error.message || 'Failed to save task' },
+        errors: { general: msg || 'Failed to save task' },
       }));
     }
   };
@@ -118,7 +117,7 @@ export function TaskForm({
         error={formState.errors.title}
         touched={formState.touched.title}
         required
-        disabled={formState.isSubmitting}
+        disabled={isSubmitting}
         placeholder="Enter task title"
       />
 
@@ -131,7 +130,7 @@ export function TaskForm({
         onBlur={() => handleBlur('description')}
         error={formState.errors.description}
         touched={formState.touched.description}
-        disabled={formState.isSubmitting}
+        disabled={isSubmitting}
         placeholder="Enter task description"
         rows={4}
       />
@@ -141,8 +140,8 @@ export function TaskForm({
           type="submit"
           variant="primary"
           size="md"
-          isLoading={formState.isSubmitting}
-          disabled={formState.isSubmitting}
+          isLoading={isSubmitting}
+          disabled={isSubmitting}
         >
           {mode === 'create' ? 'Create Task' : 'Save Changes'}
         </Button>
@@ -151,7 +150,7 @@ export function TaskForm({
           variant="ghost"
           size="md"
           onClick={onCancel}
-          disabled={formState.isSubmitting}
+          disabled={isSubmitting}
         >
           Cancel
         </Button>

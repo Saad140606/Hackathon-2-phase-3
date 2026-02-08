@@ -8,7 +8,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 interface ReAuthenticationModalProps {
   show: boolean;
@@ -18,18 +18,16 @@ interface ReAuthenticationModalProps {
 export function ReAuthenticationModal({ show, onClose }: ReAuthenticationModalProps) {
   const router = useRouter();
 
-  if (!show) return null;
-
   const handleReAuthenticate = () => {
     // Redirect to login page
     router.push('/signin');
   };
 
-  const handleStay = () => {
+  const handleStay = useCallback(() => {
     if (onClose) {
       onClose();
     }
-  };
+  }, [onClose]);
 
   // Add Escape key handler for keyboard accessibility
   useEffect(() => {
@@ -46,7 +44,9 @@ export function ReAuthenticationModal({ show, onClose }: ReAuthenticationModalPr
     return () => {
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [show]);
+  }, [show, handleStay]);
+
+  if (!show) return null;
 
   return (
     <>
