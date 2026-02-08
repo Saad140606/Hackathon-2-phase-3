@@ -12,7 +12,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // Helper function to decode JWT token
 function parseJwt(token: string) {
   try {
-    const base64Url = token.split('.')[1];
+    if (!token || typeof token !== 'string') return null;
+    const parts = token.split('.');
+    if (parts.length < 2 || !parts[1]) return null;
+    const base64Url = parts[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
       atob(base64)
@@ -23,7 +26,8 @@ function parseJwt(token: string) {
 
     return JSON.parse(jsonPayload);
   } catch (error) {
-    console.error('Error parsing JWT token:', error);
+    // Don't throw on invalid tokens; return null so callers treat user as unauthenticated
+    console.debug('Error parsing JWT token:', error);
     return null;
   }
 }
