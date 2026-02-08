@@ -7,4 +7,10 @@ const apiClient = axios.create({
   withCredentials: true,
 });
 
+// Log the resolved API base at runtime so deployed builds can be verified
+if (typeof window !== 'undefined') {
+  // eslint-disable-next-line no-console
+  console.log('API_BASE:', apiClient.defaults.baseURL);
+}
+
 export default apiClient;
