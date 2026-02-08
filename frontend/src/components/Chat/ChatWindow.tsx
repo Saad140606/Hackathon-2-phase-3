@@ -57,7 +57,7 @@ export function ChatWindow({ conversationId = null }: ChatWindowProps) {
       <div
         className={`
           ${isSidebarOpen ? 'block' : 'hidden'}
-          md:block md:w-80 lg:w-96 flex-shrink-0
+          md:block md:w-80 lg:w-96 shrink-0
           absolute md:relative inset-y-0 left-0 z-30
           bg-gray-50 md:bg-transparent
         `}
@@ -89,7 +89,7 @@ export function ChatWindow({ conversationId = null }: ChatWindowProps) {
           {/* Mobile menu toggle */}
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            className="md:hidden min-w-11 min-h-11 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
             aria-label="Toggle conversation list"
           >
             <svg

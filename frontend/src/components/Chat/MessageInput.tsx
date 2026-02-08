@@ -91,7 +91,7 @@ export function MessageInput({
       <button
         onClick={handleSubmit}
         disabled={!canSend}
-        className="px-5 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 disabled:from-gray-700 disabled:to-gray-800 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 self-start"
+        className="px-5 py-3 bg-linear-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 disabled:from-gray-700 disabled:to-gray-800 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 self-start"
         aria-label="Send message"
       >
         <svg

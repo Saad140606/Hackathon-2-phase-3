@@ -153,7 +153,7 @@ export function ErrorBanner({
     >
       <div className="flex items-start gap-3">
         {/* Icon */}
-        <div className={`flex-shrink-0 ${styles.icon}`}>
+        <div className={`shrink-0 ${styles.icon}`}>
           {getIcon()}
         </div>
 
@@ -180,7 +180,7 @@ export function ErrorBanner({
         </div>
 
         {/* Actions */}
-        <div className="flex-shrink-0 flex items-center gap-2">
+        <div className="shrink-0 flex items-center gap-2">
           {/* Retry button (if retry handler provided) */}
           {onRetry && (
             <button
@@ -209,7 +209,7 @@ export function ErrorBanner({
                 transition-opacity
                 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900
                 rounded-md
-                p-2 min-w-[44px] min-h-[44px] flex items-center justify-center
+                p-2 min-w-11 min-h-11 flex items-center justify-center
               `}
               aria-label="Dismiss error"
             >
@@ -249,7 +249,7 @@ export function CompactErrorBanner({
       role="alert"
     >
       <svg
-        className="h-4 w-4 text-red-400 flex-shrink-0"
+        className="h-4 w-4 text-red-400 shrink-0"
         viewBox="0 0 20 20"
         fill="currentColor"
       >

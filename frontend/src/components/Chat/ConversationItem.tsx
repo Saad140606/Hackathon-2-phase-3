@@ -89,7 +89,7 @@ export function ConversationItem({
         {/* Timestamp */}
         <span
           className={`
-            text-xs flex-shrink-0
+            text-xs shrink-0
             ${isActive ? 'text-blue-700' : 'text-gray-500'}
           `}
         >

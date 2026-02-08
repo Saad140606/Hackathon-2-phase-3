@@ -59,7 +59,7 @@ export function ConversationList({
   return (
     <div className="flex flex-col h-full bg-gray-50 border-r border-gray-200">
       {/* Header with New Conversation button */}
-      <div className="flex-shrink-0 p-4 border-b border-gray-200">
+      <div className="shrink-0 p-4 border-b border-gray-200">
         <button
           onClick={onNewConversation}
           className="
@@ -166,7 +166,7 @@ export function ConversationList({
 
       {/* Footer with conversation count */}
       {!isLoading && conversations.length > 0 && (
-        <div className="flex-shrink-0 px-4 py-2 border-t border-gray-200 bg-gray-100">
+        <div className="shrink-0 px-4 py-2 border-t border-gray-200 bg-gray-100">
           <p className="text-xs text-gray-600 text-center">
             {conversations.length} {conversations.length === 1 ? 'conversation' : 'conversations'}
           </p>

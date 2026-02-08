@@ -28,9 +28,9 @@ export function TaskChatAssistant() {
   const showWelcome = messages.length === 0 && !isLoading;
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden">
+    <div className="flex flex-col h-full bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden">
       {/* Header */}
-      <div className="flex-shrink-0 bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 px-6 py-4 border-b border-blue-500/20">
+      <div className="shrink-0 bg-linear-to-r from-blue-600 via-blue-500 to-purple-600 px-6 py-4 border-b border-blue-500/20">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
             <svg
@@ -60,7 +60,7 @@ export function TaskChatAssistant() {
 
       {/* Error Banner */}
       {error && (
-        <div className="flex-shrink-0 p-4 border-b border-gray-700/50">
+        <div className="shrink-0 p-4 border-b border-gray-700/50">
           <ErrorBanner error={error} onRetry={error.retry} onClose={clearError} position="inline" />
         </div>
       )}
@@ -70,7 +70,7 @@ export function TaskChatAssistant() {
         {showWelcome ? (
           <div className="h-full flex items-center justify-center p-6">
             <div className="max-w-md text-center space-y-6">
-              <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <div className="w-20 h-20 mx-auto bg-linear-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
                 <svg
                   className="w-10 h-10 text-white"
                   fill="none"
@@ -120,7 +120,7 @@ export function TaskChatAssistant() {
       </div>
 
       {/* Input */}
-      <div className="flex-shrink-0 bg-gray-800/50 backdrop-blur-sm border-t border-gray-700/50 p-4">
+      <div className="shrink-0 bg-gray-800/50 backdrop-blur-sm border-t border-gray-700/50 p-4">
         <MessageInput onSend={sendMessage} disabled={isLoading} />
       </div>
 
