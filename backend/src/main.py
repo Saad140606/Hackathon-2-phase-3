@@ -47,6 +47,10 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     # Allow localhost origins via regex to cover dev ports
+    # Allow Vercel deployed frontend plus localhost dev ports
+    allow_origins=[
+        "https://hackathon-2-phase-3-todo-app-with-chatbot.vercel.app",
+    ],
     allow_origin_regex=r"http://localhost:([0-9]+)",
     allow_credentials=True,
     allow_methods=["*"],
